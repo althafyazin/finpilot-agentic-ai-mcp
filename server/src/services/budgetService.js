@@ -2,6 +2,7 @@ const Budget = require('../models/Budget');
 const Expense = require('../models/Expense');
 const Category = require('../models/Category');
 const Notification = require('../models/Notification');
+const mongoose = require('mongoose');
 const AppError = require('../utils/AppError');
 
 class BudgetService {
@@ -57,10 +58,11 @@ class BudgetService {
     }).populate('category', 'name icon color type');
 
     // 2. Aggregate Actual Monthly Expenses grouped by Category
+    const userObjectId = new mongoose.Types.ObjectId(userId);
     const expenseAggregates = await Expense.aggregate([
       {
         $match: {
-          user: userId,
+          user: userObjectId,
           date: { $gte: startDate, $lte: endDate },
         },
       },

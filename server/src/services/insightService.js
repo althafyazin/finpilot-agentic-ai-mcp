@@ -50,7 +50,7 @@ const insightService = {
     budgets.forEach((b) => {
       const catExp = categoryExpenses.find((c) => c.name === b.category?.name);
       const spent = catExp ? catExp.amount : 0;
-      if (spent > b.amount) {
+      if (spent > b.amountLimit) {
         exceededBudgetsCount++;
       }
     });

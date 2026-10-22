@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/common/Sidebar';
 import Navbar from './components/common/Navbar';
+import AIChat from './components/AIChat';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -13,7 +14,7 @@ import Incomes from './pages/Incomes';
 import Budgets from './pages/Budgets';
 import Recurring from './pages/Recurring';
 
-const AppLayout = ({ children }) => {
+const AppLayout = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -40,8 +41,11 @@ const AppLayout = ({ children }) => {
       <div className="flex-1 flex flex-col min-w-0">
         <Navbar pageTitle={getPageTitle(location.pathname)} onMenuToggle={() => setMobileOpen((o) => !o)} />
         {/* pb-16 md:pb-0 → leaves room for the mobile bottom tab bar */}
-        <main className="flex-1 p-4 md:p-8 pb-20 md:pb-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 md:p-8 pb-20 md:pb-8 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
+      <AIChat />
     </div>
   );
 };
@@ -58,46 +62,13 @@ function App() {
 
             {/* Protected Private Routes */}
             <Route element={<ProtectedRoute />}>
-              <Route
-                path="/"
-                element={
-                  <AppLayout>
-                    <Dashboard />
-                  </AppLayout>
-                }
-              />
-              <Route
-                path="/expenses"
-                element={
-                  <AppLayout>
-                    <Expenses />
-                  </AppLayout>
-                }
-              />
-              <Route
-                path="/incomes"
-                element={
-                  <AppLayout>
-                    <Incomes />
-                  </AppLayout>
-                }
-              />
-              <Route
-                path="/budgets"
-                element={
-                  <AppLayout>
-                    <Budgets />
-                  </AppLayout>
-                }
-              />
-              <Route
-                path="/recurring"
-                element={
-                  <AppLayout>
-                    <Recurring />
-                  </AppLayout>
-                }
-              />
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/expenses" element={<Expenses />} />
+                <Route path="/incomes" element={<Incomes />} />
+                <Route path="/budgets" element={<Budgets />} />
+                <Route path="/recurring" element={<Recurring />} />
+              </Route>
             </Route>
 
             {/* Fallback 404 Redirect */}

@@ -57,7 +57,7 @@ const exportService = {
       incomes.forEach((item) => {
         records.push({
           type: 'Income',
-          title: item.title,
+          title: item.source,
           amount: item.amount,
           category: item.category ? item.category.name : 'Uncategorized',
           paymentMethod: item.source || 'Direct Deposit',
